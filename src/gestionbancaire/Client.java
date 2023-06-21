@@ -33,6 +33,9 @@ public class Client extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu8 = new javax.swing.JMenu();
+        jMenu9 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -56,6 +59,12 @@ public class Client extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         jMenu7 = new javax.swing.JMenu();
+
+        jMenu8.setText("File");
+        jMenuBar2.add(jMenu8);
+
+        jMenu9.setText("Edit");
+        jMenuBar2.add(jMenu9);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -253,7 +262,7 @@ public class Client extends javax.swing.JFrame {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con1=DriverManager.getConnection("jdbc:mysql://localhost:3306/gestionbancaire?zeroDateTimeBehavior=CONVERT_TO_NULL","root","");
-            ajoutClient=con1.prepareStatement("SELECT * FROM client");
+            ajoutClient=con1.prepareStatement("SELECT * FROM Client");
             ResultSet rs=ajoutClient.executeQuery();
             ResultSetMetaData Res=rs.getMetaData();
             c=Res.getColumnCount();
@@ -418,7 +427,10 @@ public class Client extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
