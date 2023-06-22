@@ -94,19 +94,17 @@ public class Virement extends javax.swing.JFrame {
         Montant = new javax.swing.JTextField();
         NumEnvoyeur = new javax.swing.JTextField();
         NumReceveur = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        ajouter = new javax.swing.JButton();
+        modifier = new javax.swing.JButton();
+        supprimer = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableVirement = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenu7 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,24 +124,26 @@ public class Virement extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Ajouter");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ajouter.setText("Ajouter");
+        ajouter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ajouterActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Modifier");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        modifier.setText("Modifier");
+        modifier.setEnabled(false);
+        modifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                modifierActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Supprimer");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        supprimer.setText("Supprimer");
+        supprimer.setEnabled(false);
+        supprimer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                supprimerActionPerformed(evt);
             }
         });
 
@@ -155,11 +155,11 @@ public class Virement extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addGroup(NumreceveurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(NumreceveurLayout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(ajouter)
                         .addGap(58, 58, 58)
-                        .addComponent(jButton2)
+                        .addComponent(modifier)
                         .addGap(44, 44, 44)
-                        .addComponent(jButton3))
+                        .addComponent(supprimer))
                     .addGroup(NumreceveurLayout.createSequentialGroup()
                         .addGroup(NumreceveurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(NumreceveurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -203,9 +203,9 @@ public class Virement extends javax.swing.JFrame {
                     .addComponent(NumReceveur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addGroup(NumreceveurLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(ajouter)
+                    .addComponent(modifier)
+                    .addComponent(supprimer))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
 
@@ -223,9 +223,16 @@ public class Virement extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tableVirement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -235,26 +242,39 @@ public class Virement extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableVirement);
 
-        jMenu1.setText("Gestion Bancaire");
-        jMenuBar1.add(jMenu1);
+        jLabel6.setText("VIREMENT");
 
         jMenu2.setText("Client");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Versement");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Retrait");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Virement");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
-
-        jMenu6.setText("Bilan");
-        jMenuBar1.add(jMenu6);
-
-        jMenu7.setText("Histogramme");
-        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -263,8 +283,13 @@ public class Virement extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(Numreceveur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(Numreceveur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(221, 221, 221)
+                        .addComponent(jLabel6)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -274,7 +299,9 @@ public class Virement extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Numreceveur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -299,9 +326,16 @@ public class Virement extends javax.swing.JFrame {
         Montant.setText(Df.getValueAt(selectedIndex, 2).toString());
         NumEnvoyeur.setText(Df.getValueAt(selectedIndex, 3).toString());
         NumReceveur.setText(Df.getValueAt(selectedIndex, 4).toString());
+        
+        ajouter.setEnabled(false);
+        modifier.setEnabled(true);
+        supprimer.setEnabled(true);
+        NumVirement.setEnabled(false);
+        NumEnvoyeur.setEnabled(false);
+        NumReceveur.setEnabled(false);
     }//GEN-LAST:event_tableVirementMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterActionPerformed
         // TODO add your handling code here:
         String vNumVirement = NumVirement.getText();
         String vDateVirement = DateVirement.getText();
@@ -353,9 +387,9 @@ public class Virement extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_ajouterActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supprimerActionPerformed
         // TODO add your handling code here:
         DefaultTableModel Df=(DefaultTableModel)tableVirement.getModel();
         int selectedIndex=tableVirement.getSelectedRow();
@@ -413,9 +447,15 @@ public class Virement extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        NumVirement.setEnabled(true);
+        NumEnvoyeur.setEnabled(true);
+        NumReceveur.setEnabled(true);
+    }//GEN-LAST:event_supprimerActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void modifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifierActionPerformed
         // TODO add your handling code here:
         String vNumVirement = NumVirement.getText();
         String vDateVirement = DateVirement.getText();
@@ -474,7 +514,37 @@ public class Virement extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         } 
-    }//GEN-LAST:event_jButton2ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        NumVirement.setEnabled(true);
+        NumEnvoyeur.setEnabled(true);
+        NumReceveur.setEnabled(true);
+    }//GEN-LAST:event_modifierActionPerformed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        new Client().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        // TODO add your handling code here:
+        new Versement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        // TODO add your handling code here:
+        new Retrait().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        // TODO add your handling code here:
+        new Versement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -518,23 +588,21 @@ public class Virement extends javax.swing.JFrame {
     private javax.swing.JTextField NumReceveur;
     private javax.swing.JTextField NumVirement;
     private javax.swing.JPanel Numreceveur;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton ajouter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton modifier;
+    private javax.swing.JButton supprimer;
     private javax.swing.JTable tableVirement;
     // End of variables declaration//GEN-END:variables
 }

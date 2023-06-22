@@ -88,19 +88,17 @@ public class Versement extends javax.swing.JFrame {
         DateVersement = new javax.swing.JTextField();
         Montant = new javax.swing.JTextField();
         NumCompte = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        ajouter = new javax.swing.JButton();
+        modifier = new javax.swing.JButton();
+        supprimer = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableVersement = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenu7 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -124,24 +122,26 @@ public class Versement extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Ajouter");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ajouter.setText("Ajouter");
+        ajouter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ajouterActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Modifier");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        modifier.setText("Modifier");
+        modifier.setEnabled(false);
+        modifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                modifierActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Supprimer");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        supprimer.setText("Supprimer");
+        supprimer.setEnabled(false);
+        supprimer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                supprimerActionPerformed(evt);
             }
         });
 
@@ -170,11 +170,11 @@ public class Versement extends javax.swing.JFrame {
                             .addComponent(DateVersement))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(ajouter)
                         .addGap(103, 103, 103)
-                        .addComponent(jButton2)
+                        .addComponent(modifier)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
+                        .addComponent(supprimer)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -202,10 +202,10 @@ public class Versement extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton2))
+                        .addComponent(ajouter)
+                        .addComponent(modifier))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(supprimer)
                         .addContainerGap())))
         );
 
@@ -223,9 +223,16 @@ public class Versement extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tableVersement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -235,26 +242,39 @@ public class Versement extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableVersement);
 
-        jMenu1.setText("Gestion Bancaire");
-        jMenuBar1.add(jMenu1);
+        jLabel5.setText("VERSEMENT");
 
         jMenu2.setText("Client");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Versement");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Retrait");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Virement");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
-
-        jMenu6.setText("Bilan");
-        jMenuBar1.add(jMenu6);
-
-        jMenu7.setText("Histogramme");
-        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -265,21 +285,27 @@ public class Versement extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 159, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
+                .addGap(60, 60, 60))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(235, 235, 235)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(113, Short.MAX_VALUE))
+                        .addGap(79, 79, 79)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
 
         pack();
@@ -293,7 +319,7 @@ public class Versement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_NumCompteActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterActionPerformed
                 // TODO add your handling code here:
         String vNumVersement = NumVersement.getText();
         String vDateVersement = DateVersement.getText();
@@ -329,9 +355,9 @@ public class Versement extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }  
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_ajouterActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void modifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifierActionPerformed
         // TODO add your handling code here:
         DefaultTableModel Df=(DefaultTableModel)tableVersement.getModel();
         int selectedIndex=tableVersement.getSelectedRow();
@@ -345,13 +371,13 @@ public class Versement extends javax.swing.JFrame {
             ancienSolde = con1.prepareStatement("SELECT * FROM client WHERE NumCompte='"+vNumCompte+"'");
             ResultSet rs = ancienSolde.executeQuery();
             int ancienSoldeInt=0;
-             while (rs.next()) {
+             if (rs.next()) {
                     ancienSoldeInt=rs.getInt("Solde");
             }
             ancienVersement=con1.prepareStatement("SELECT Montant FROM Versement WHERE NumVersement='"+vNumVersement+"'");
             ResultSet rs2=ancienVersement.executeQuery();
             int ancienVersementInt=0;
-            while(rs2.next()){
+            if(rs2.next()){
                 ancienVersementInt=rs2.getInt("Montant");
             }
            
@@ -361,7 +387,7 @@ public class Versement extends javax.swing.JFrame {
             ajoutVersement.executeUpdate();
             
             
-            JOptionPane.showMessageDialog(this, "Retrait Modifie");
+            JOptionPane.showMessageDialog(this, "Versement Modifie");
             
             NumVersement.setText("");
             DateVersement.setText("");
@@ -373,7 +399,11 @@ public class Versement extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        NumVersement.setEnabled(true); 
+    }//GEN-LAST:event_modifierActionPerformed
 
     private void tableVersementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableVersementMouseClicked
         // TODO add your handling code here:
@@ -383,10 +413,14 @@ public class Versement extends javax.swing.JFrame {
         NumVersement.setText(Df.getValueAt(selectedIndex, 0).toString());
         DateVersement.setText(Df.getValueAt(selectedIndex, 1).toString());
         Montant.setText(Df.getValueAt(selectedIndex, 2).toString());
-        NumCompte.setText(Df.getValueAt(selectedIndex, 3).toString());  
+        NumCompte.setText(Df.getValueAt(selectedIndex, 3).toString());   
+        ajouter.setEnabled(false);
+        modifier.setEnabled(true);
+        supprimer.setEnabled(true);
+        NumVersement.setEnabled(false);   
     }//GEN-LAST:event_tableVersementMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supprimerActionPerformed
         // TODO add your handling code here:
         DefaultTableModel Df=(DefaultTableModel)tableVersement.getModel();
         int selectedIndex=tableVersement.getSelectedRow();
@@ -432,7 +466,35 @@ public class Versement extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        NumVersement.setEnabled(true); 
+    }//GEN-LAST:event_supprimerActionPerformed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        new Client().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        // TODO add your handling code here:
+        new Versement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        // TODO add your handling code here:
+        new Retrait().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        // TODO add your handling code here:
+        new Virement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -474,23 +536,21 @@ public class Versement extends javax.swing.JFrame {
     private javax.swing.JTextField Montant;
     private javax.swing.JTextField NumCompte;
     private javax.swing.JTextField NumVersement;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton ajouter;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton modifier;
+    private javax.swing.JButton supprimer;
     private javax.swing.JTable tableVersement;
     // End of variables declaration//GEN-END:variables
 }

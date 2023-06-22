@@ -73,9 +73,9 @@ public class Retrait extends javax.swing.JFrame {
         numCheque = new javax.swing.JLabel();
         numCompte = new javax.swing.JLabel();
         date = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        ajouter = new javax.swing.JButton();
+        modifier = new javax.swing.JButton();
+        supprimer = new javax.swing.JButton();
         numCompteText = new javax.swing.JTextField();
         montantText = new javax.swing.JTextField();
         numCheqText = new javax.swing.JTextField();
@@ -84,22 +84,20 @@ public class Retrait extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableRetrait = new javax.swing.JTable();
-        jLabel6 = new javax.swing.JLabel();
-        solde = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenu7 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
         jMenuItem2.setText("jMenuItem2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(32767, 32767));
+        setPreferredSize(new java.awt.Dimension(889, 417));
 
         numCheque.setText("Numéro chèque");
 
@@ -107,24 +105,26 @@ public class Retrait extends javax.swing.JFrame {
 
         date.setText("Date de Retrait");
 
-        jButton1.setText("Ajouter");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        ajouter.setText("Ajouter");
+        ajouter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                ajouterActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Modifier");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        modifier.setText("Modifier");
+        modifier.setEnabled(false);
+        modifier.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                modifierActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Supprimer");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        supprimer.setText("Supprimer");
+        supprimer.setEnabled(false);
+        supprimer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                supprimerActionPerformed(evt);
             }
         });
 
@@ -154,11 +154,11 @@ public class Retrait extends javax.swing.JFrame {
                             .addComponent(numCompteText)
                             .addComponent(numCheqText)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(ajouter)
                         .addGap(36, 36, 36)
-                        .addComponent(jButton2)
+                        .addComponent(modifier)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                        .addComponent(jButton3)))
+                        .addComponent(supprimer)))
                 .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
@@ -182,9 +182,9 @@ public class Retrait extends javax.swing.JFrame {
                     .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(ajouter)
+                    .addComponent(modifier)
+                    .addComponent(supprimer))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -204,9 +204,16 @@ public class Retrait extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         tableRetrait.setName("tableRetrait"); // NOI18N
@@ -217,34 +224,39 @@ public class Retrait extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableRetrait);
 
-        jLabel6.setText("Effectif : ");
-
-        solde.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                soldeActionPerformed(evt);
-            }
-        });
-
-        jMenu1.setText("Gestion Bancaire");
-        jMenuBar1.add(jMenu1);
+        jLabel1.setText("RETRAIT");
 
         jMenu2.setText("Client");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Versement");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Retrait");
+        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu4MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Virement");
+        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu5MouseClicked(evt);
+            }
+        });
         jMenuBar1.add(jMenu5);
-
-        jMenu6.setText("Bilan");
-        jMenuBar1.add(jMenu6);
-
-        jMenu7.setText("Histogramme");
-        jMenuBar1.add(jMenu7);
 
         setJMenuBar(jMenuBar1);
 
@@ -258,14 +270,14 @@ public class Retrait extends javax.swing.JFrame {
                 .addGap(255, 255, 255))
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(solde, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -274,22 +286,20 @@ public class Retrait extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(solde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(29, 29, 29)
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel1)
+                        .addGap(31, 31, 31)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39)
-                .addComponent(jLabel6)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void ajouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterActionPerformed
         String numcompte = numCompteText.getText();
         String numCheque = numCheqText.getText();
         String date = dateText.getText();
@@ -308,8 +318,6 @@ public class Retrait extends javax.swing.JFrame {
          
            
             int nouveauSoldeInt=ancienSoldeInt-Integer.parseInt(montant);
-            String b=Integer.toString(nouveauSoldeInt);
-            solde.setText(b);
             nouveauSolde = con1.prepareStatement("UPDATE Client SET Solde='"+nouveauSoldeInt+"' WHERE NumCompte='"+numcompte+"'");
             ajoutRetrait.executeUpdate();
             nouveauSolde.executeUpdate();
@@ -326,9 +334,9 @@ public class Retrait extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_ajouterActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void modifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modifierActionPerformed
                 // TODO add your handling code here:
         DefaultTableModel Df=(DefaultTableModel)tableRetrait.getModel();
         int selectedIndex=tableRetrait.getSelectedRow();
@@ -354,8 +362,6 @@ public class Retrait extends javax.swing.JFrame {
             }
            
             int nouveauSoldeInt=ancienSoldeInt-Integer.parseInt(montant)+ancienRetraitInt;
-            String b=Integer.toString(nouveauSoldeInt);
-            solde.setText(b);
             nouveauSolde = con1.prepareStatement("UPDATE Client SET Solde='"+nouveauSoldeInt+"' WHERE NumCompte='"+numcompte+"'");
             nouveauSolde.executeUpdate();
             ajoutRetrait.executeUpdate();
@@ -373,7 +379,11 @@ public class Retrait extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        numCheqText.setEnabled(true);  
+    }//GEN-LAST:event_modifierActionPerformed
 
     private void tableRetraitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableRetraitMouseClicked
 
@@ -383,10 +393,14 @@ public class Retrait extends javax.swing.JFrame {
         numCheqText.setText(Df.getValueAt(selectedIndex, 0).toString());
         montantText.setText(Df.getValueAt(selectedIndex, 2).toString());
         dateText.setText(Df.getValueAt(selectedIndex, 3).toString());
-        numCompteText.setText(Df.getValueAt(selectedIndex, 1).toString());      // TODO add your handling code here:
+        numCompteText.setText(Df.getValueAt(selectedIndex, 1).toString()); 
+        ajouter.setEnabled(false);
+        modifier.setEnabled(true);
+        supprimer.setEnabled(true);
+        numCheqText.setEnabled(false);     // TODO add your handling code here:
     }//GEN-LAST:event_tableRetraitMouseClicked
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supprimerActionPerformed
         // TODO add your handling code here:
         DefaultTableModel Df=(DefaultTableModel)tableRetrait.getModel();
         int selectedIndex=tableRetrait.getSelectedRow();
@@ -413,8 +427,6 @@ public class Retrait extends javax.swing.JFrame {
             }
            
             int nouveauSoldeInt=ancienSoldeInt+ancienRetraitInt;
-            String b=Integer.toString(nouveauSoldeInt);
-            solde.setText(b);
             nouveauSolde = con1.prepareStatement("UPDATE Client SET Solde='"+nouveauSoldeInt+"' WHERE NumCompte='"+numcompte+"'");
             nouveauSolde.executeUpdate();
             ajoutRetrait.executeUpdate();
@@ -434,11 +446,35 @@ public class Retrait extends javax.swing.JFrame {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton3ActionPerformed
+        ajouter.setEnabled(true);
+        modifier.setEnabled(false);
+        supprimer.setEnabled(false);
+        numCheqText.setEnabled(true);  
+    }//GEN-LAST:event_supprimerActionPerformed
 
-    private void soldeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soldeActionPerformed
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_soldeActionPerformed
+        new Client().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        // TODO add your handling code here:
+        new Versement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu3MouseClicked
+
+    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+        // TODO add your handling code here:
+        new Retrait().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu4MouseClicked
+
+    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+        // TODO add your handling code here:
+        new Virement().setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_jMenu5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -476,32 +512,28 @@ public class Retrait extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ajouter;
     private javax.swing.JLabel date;
     private javax.swing.JTextField dateText;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton modifier;
     private javax.swing.JLabel montant;
     private javax.swing.JTextField montantText;
     private javax.swing.JTextField numCheqText;
     private javax.swing.JLabel numCheque;
     private javax.swing.JLabel numCompte;
     private javax.swing.JTextField numCompteText;
-    private javax.swing.JTextField solde;
+    private javax.swing.JButton supprimer;
     private javax.swing.JTable tableRetrait;
     // End of variables declaration//GEN-END:variables
 }
